@@ -15,8 +15,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
         try (Statement statement = Util.getConnection().createStatement()) {
-            statement.execute("CREATE DATABASE users;");
-            statement.execute("CREATE TABLE users.user (\n" +
+            //statement.execute("CREATE DATABASE users;");
+            statement.execute("CREATE TABLE user (\n" +
                     "  `ID` INT NOT NULL AUTO_INCREMENT, \n" +
                     "  `Name` VARCHAR(45) NOT NULL,\n" +
                     "  `LastName` VARCHAR(45) NOT NULL,\n" +
@@ -29,8 +29,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Statement statement = Util.getConnection().createStatement()) {
-            statement.execute("DROP TABLE users.user;");
-            statement.execute("DROP DATABASE users;");
+            statement.execute("DROP TABLE user;");
+            //statement.execute("DROP DATABASE users;");
         } catch (SQLException e) {
             System.out.println("Такого пользователя не существует!");
         }
@@ -39,7 +39,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try (Statement statement = Util.getConnection().createStatement()) {
-            statement.executeUpdate("INSERT INTO users.user(Name, LastName, Age)\n" + "VALUES('"
+            statement.executeUpdate("INSERT INTO user(Name, LastName, Age)\n" + "VALUES('"
                     + name + "', '" + lastName + "', " + age + ");");
         } catch (SQLException e) {
             System.out.println("Не удалось сохранить пользователя!");
@@ -48,7 +48,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         try (Statement statement = Util.getConnection().createStatement()) {
-            statement.executeUpdate("DELETE FROM users.user WHERE ID = '" + id + "';");
+            statement.executeUpdate("DELETE FROM user WHERE ID = '" + id + "';");
         } catch (SQLException e) {
             System.out.println("Не удалось удалить пользователя!");
         }
@@ -58,7 +58,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try (Statement statement = Util.getConnection().createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM users.user;");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM user;");
             while (resultSet.next()) {
                 User user = new User(resultSet.getString("Name"),
                         resultSet.getString("LastName"), (byte) resultSet.getInt("Age"));
@@ -74,7 +74,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try (Statement statement = Util.getConnection().createStatement()) {
-            statement.execute("DELETE FROM users.user;");
+            statement.execute("DELETE FROM user;");
         } catch (SQLException e) {
             System.out.println("Не удалось удалить таблицу!");
         }
