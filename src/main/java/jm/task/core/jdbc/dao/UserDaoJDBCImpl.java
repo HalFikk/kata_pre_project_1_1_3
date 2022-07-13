@@ -3,6 +3,7 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -38,17 +39,19 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (Statement statement = Util.getConnection().createStatement()) {
-            statement.executeUpdate("INSERT INTO user(Name, LastName, Age)\n" + "VALUES('"
-                    + name + "', '" + lastName + "', " + age + ");");
+        try (PreparedStatement statement = Util.getConnection()
+                .prepareStatement("INSERT INTO user(Name, LastName, Age)\n" + "VALUES('"
+                        + name + "', '" + lastName + "', " + age + ");")) {
+            statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Не удалось сохранить пользователя!");
         }
     }
 
     public void removeUserById(long id) {
-        try (Statement statement = Util.getConnection().createStatement()) {
-            statement.executeUpdate("DELETE FROM user WHERE ID = '" + id + "';");
+        try (PreparedStatement statement = Util.getConnection()
+                .prepareStatement("DELETE FROM user WHERE ID = '" + id + "';")) {
+            statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Не удалось удалить пользователя!");
         }
